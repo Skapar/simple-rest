@@ -53,11 +53,15 @@ func NewApp() *App {
 	}
 
 	router := gin.Default()
+	router.Use(gin.LoggerWithConfig(gin.LoggerConfig{SkipPaths: []string{"/health"}}))
+	router.Use(gin.Recovery())
+	router.Use(gin.ErrorLogger())
 
 	authRepo := repository.NewAuthRepository(db)
-	authService := service.NewAuthService(authRepo)
+	authService := service.NewAuthService(authRepo, cfg)
+	userService := service.NewUserService(authRepo)
 
-	routes.SetupRoutes(router, authService)
+	routes.SetupRoutes(router, authService, userService)
 
 	return &App{
 		Log:    log,

@@ -9,6 +9,7 @@ import (
 type Config struct {
 	ListenHttpPort string `envconfig:"LISTEN_HTTP_PORT" default:"8080"`
 	PostgresAddr   string `envconfig:"POSTGRES_ADDR" default:""`
+	JWTSecret      string `envconfig:"JWT_SECRET" default:"secret"`
 }
 
 func New() *Config {
