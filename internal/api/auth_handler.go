@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/Skapar/simple-rest/internal/models"
 	"github.com/Skapar/simple-rest/internal/models/entities"
 	"github.com/Skapar/simple-rest/internal/service"
 	"github.com/Skapar/simple-rest/internal/utils"
@@ -30,7 +31,11 @@ func (ah *AuthHandler) RegisterUserHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"user": user, "access_token": accessToken, "refresh_token": refreshToken})
+	c.JSON(http.StatusCreated, models.Response[interface{}]{
+		Data:    gin.H{"user": user, "access_token": accessToken, "refresh_token": refreshToken},
+		Message: "user registered successfully",
+		Success: true,
+	})
 }
 
 func handleRegisterUserError(c *gin.Context, err error) {
