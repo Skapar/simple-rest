@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/Skapar/simple-rest/internal/models/entities"
+	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
@@ -18,5 +19,8 @@ func NewAuthRepository(db *gorm.DB) AuthRepository {
 }
 
 func (r *AuthRepositoryImpl) CreateUser(user *entities.User) error {
-	return r.db.Create(user).Error
+	if err := r.db.Create(user).Error; err != nil {
+		return errors.Wrap(err, "failed to create user")
+	}
+	return nil
 }
