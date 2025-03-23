@@ -13,7 +13,12 @@
 go mod tidy
 ```
 
-### 2️⃣ Создайте файл `.env`  
+### 2️⃣ Установите `goose`
+```sh
+go install github.com/pressly/goose/v3/cmd/goose@latest
+```
+
+### 3️⃣ Создайте файл `.env`  
 Пример `.env` файла:
 ```sh
 DB_HOST=localhost
@@ -23,15 +28,21 @@ DB_NAME=yourdb
 DB_PORT=5432
 ```
 
-### 3️⃣ Загрузите переменные окружения
+### 4️⃣ Загрузите переменные окружения
 ```sh
 source .env
 ```
 
-### 4️⃣ Запустите проект
+### 5️⃣ Выполните миграции
+```sh
+make migrate-up
+```
+
+### 6️⃣ Запустите проект
 ```sh
 go run main.go
 ```
+
 
 ---
 
