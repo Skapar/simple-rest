@@ -19,6 +19,26 @@ func NewUserHandler(userService service.UserService) *UserHandler {
 	return &UserHandler{userService: userService}
 }
 
+func (uh *UserHandler) GetUserHandler(c *gin.Context) {
+	userID, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if err != nil {
+		utils.RespondWithError(c, http.StatusBadRequest, "invalid user_id")
+		return
+	}
+
+	user, err := uh.userService.GetUserById(userID)
+	if err != nil {
+		utils.RespondWithError(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, models.Response[entities.User]{
+		Data:    *user,
+		Message: "user retrieved successfully",
+		Success: true,
+	})
+}
+
 func (uh *UserHandler) UpdateUserHandler(c *gin.Context) {
 	userID, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if err != nil {

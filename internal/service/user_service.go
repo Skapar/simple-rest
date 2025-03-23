@@ -15,6 +15,14 @@ func NewUserService(repo repository.AuthRepository) UserService {
 	return &UserServiceImpl{repo: repo}
 }
 
+func (s *UserServiceImpl) GetUserById(userID int64) (*entities.User, error) {
+	user, err := s.repo.GetUserById(userID)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get user")
+	}
+	return user, nil
+}
+
 func (s *UserServiceImpl) UpdateUser(userID int64, user *entities.User) error {
 	existingUser, err := s.repo.GetUserById(userID)
 	if err != nil {

@@ -12,6 +12,7 @@ func SetupRoutes(router *gin.Engine, authService service.AuthService, userServic
 	userHandler := api.NewUserHandler(userService)
 
 	router.POST("/signup", authHandler.RegisterUserHandler)
+	router.GET("/user/:user_id", userHandler.GetUserHandler)
 	router.PUT("/user/:user_id", userHandler.UpdateUserHandler)
 	router.DELETE("/user/:user_id", userHandler.DeleteUserHandler)
 	router.PATCH("/user/:user_id", userHandler.SoftDeleteUserHandler)

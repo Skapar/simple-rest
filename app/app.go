@@ -52,6 +52,7 @@ func NewApp() *App {
 		log.Fatalf("failed to connect to database: %s", err)
 	}
 
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(gin.LoggerWithConfig(gin.LoggerConfig{SkipPaths: []string{"/health"}}))
 	router.Use(gin.Recovery())
