@@ -8,12 +8,21 @@ import (
 
 // SetupRoutes - настройка маршрутов
 func SetupRoutes(router *gin.Engine, authService service.AuthService, userService service.UserService) {
+	healthHandler := api.NewHealthHandler()
+
 	authHandler := api.NewAuthHandler(authService)
 	userHandler := api.NewUserHandler(userService)
 
-	router.POST("/signup", authHandler.RegisterUserHandler)
-	router.GET("/user/:user_id", userHandler.GetUserHandler)
-	router.PUT("/user/:user_id", userHandler.UpdateUserHandler)
-	router.DELETE("/user/:user_id", userHandler.DeleteUserHandler)
-	router.PATCH("/user/:user_id", userHandler.SoftDeleteUserHandler)
+	apiV1 := router.Group("/api/v1")
+
+	// routes
+	// health
+	router.GET("/health", healthHandler.CheckHealthHandler)
+
+	// user
+	apiV1.POST("/signup", authHandler.RegisterUserHandler)
+	apiV1.GET("/user/:user_id", userHandler.GetUserHandler)
+	apiV1.PUT("/user/:user_id", userHandler.UpdateUserHandler)
+	apiV1.DELETE("/user/:user_id", userHandler.DeleteUserHandler)
+	apiV1.PATCH("/user/:user_id", userHandler.SoftDeleteUserHandler)
 }
