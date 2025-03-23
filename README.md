@@ -65,6 +65,7 @@ go run main.go
 - **GORM** (ORM для работы с PostgreSQL)
 - **PostgreSQL** (Реляционная база данных)
 - **Goose** (Миграции базы данных)
+- **Docker** (Контейнеризация)
 
 ---
 
