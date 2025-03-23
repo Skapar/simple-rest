@@ -1,12 +1,14 @@
 package app
 
 import (
+	"os"
+
 	"github.com/Skapar/simple-rest/config"
+	"github.com/Skapar/simple-rest/pkg"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gorm.io/gorm"
-	"os"
 )
 
 type App struct {
@@ -39,7 +41,8 @@ func NewApp() *App {
 	cfg := config.New()
 	cfg.Init()
 
-	db, err := Connect(cfg)
+	dbService := &pkg.GormDatabase{}
+	db, err := dbService.Connect(cfg, log)
 	if err != nil {
 		log.Fatalf("failed to connect to database: %s", err)
 	}
