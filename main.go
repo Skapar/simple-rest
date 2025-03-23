@@ -6,11 +6,8 @@ import (
 
 func main() {
 	// Create a new App
-	app := app.NewApp()
-	// defer app.DB.Close()
+	application := app.NewApp()
 
-	app.Log.Infof("Starting server on port %s", app.Cfg.ListenHttpPort)
-	// app.Run()
-
-	return
+	application.Log.Infof("Starting server on port %s", application.Cfg.ListenHttpPort)
+	application.Log.Fatal(application.Router.Run(":" + application.Cfg.ListenHttpPort))
 }

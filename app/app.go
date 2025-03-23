@@ -4,7 +4,11 @@ import (
 	"os"
 
 	"github.com/Skapar/simple-rest/config"
+	"github.com/Skapar/simple-rest/internal/repository"
+	"github.com/Skapar/simple-rest/internal/routes"
+	"github.com/Skapar/simple-rest/internal/service"
 	"github.com/Skapar/simple-rest/pkg"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -12,9 +16,10 @@ import (
 )
 
 type App struct {
-	Log *zap.SugaredLogger
-	DB  *gorm.DB
-	Cfg *config.Config
+	Log    *zap.SugaredLogger
+	DB     *gorm.DB
+	Cfg    *config.Config
+	Router *gin.Engine
 }
 
 func NewApp() *App {
@@ -47,9 +52,17 @@ func NewApp() *App {
 		log.Fatalf("failed to connect to database: %s", err)
 	}
 
+	router := gin.Default()
+
+	authRepo := repository.NewAuthRepository(db)
+	authService := service.NewAuthService(authRepo)
+
+	routes.SetupRoutes(router, authService)
+
 	return &App{
-		Log: log,
-		DB:  db,
-		Cfg: cfg,
+		Log:    log,
+		DB:     db,
+		Cfg:    cfg,
+		Router: router,
 	}
 }
