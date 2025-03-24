@@ -25,6 +25,5 @@ func main() {
 	application := app.NewApp()
 
 	application.Log.Infof("Starting server on port %s", application.Cfg.ListenHttpPort)
-	application.Log.Infof("Swagger UI available at http://localhost:%s/swagger/index.html", application.Cfg.ListenHttpPort)
 	application.Log.Fatal(application.Router.Run(":" + application.Cfg.ListenHttpPort))
 }
