@@ -66,8 +66,19 @@ definitions:
       success:
         type: boolean
     type: object
+host: localhost:8080
 info:
-  contact: {}
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Это простое REST API приложение на Go с использованием Gin и GORM
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Simple REST API
+  version: "1.0"
 paths:
   /api/v1/signup:
     post:
@@ -218,4 +229,19 @@ paths:
       summary: Update a user by ID
       tags:
       - user
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Check if the server is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Check the health of the server
+      tags:
+      - health
 swagger: "2.0"
