@@ -25,7 +25,7 @@ func (r *AuthRepositoryImpl) GetUserByEmail(email string) (*entities.User, error
 	var user entities.User
 	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return nil, errors.New("user does not exist")
 		}
 		return nil, errors.Wrap(err, "failed to find user by email")
 	}
@@ -36,7 +36,7 @@ func (r *AuthRepositoryImpl) GetUserById(userID int64) (*entities.User, error) {
 	var user entities.User
 	if err := r.db.Where("id = ?", userID).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return nil, errors.New("user does not exist")
 		}
 		return nil, errors.Wrap(err, "failed to find user by id")
 	}
