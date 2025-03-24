@@ -4,6 +4,8 @@ import (
 	"github.com/Skapar/simple-rest/internal/api"
 	"github.com/Skapar/simple-rest/internal/service"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
 
 // SetupRoutes - настройка маршрутов
@@ -25,4 +27,7 @@ func SetupRoutes(router *gin.Engine, authService service.AuthService, userServic
 	apiV1.PUT("/user/:user_id", userHandler.UpdateUserHandler)
 	apiV1.DELETE("/user/:user_id", userHandler.DeleteUserHandler)
 	apiV1.PATCH("/user/:user_id", userHandler.SoftDeleteUserHandler)
+
+	// Swagger
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

@@ -14,11 +14,11 @@ func NewAuthRepository(db *gorm.DB) AuthRepository {
 	return &AuthRepositoryImpl{db: db}
 }
 
-func (r *AuthRepositoryImpl) CreateUser(user *entities.User) error {
+func (r *AuthRepositoryImpl) CreateUser(user *entities.User) (*entities.User, error) {
 	if err := r.db.Create(user).Error; err != nil {
-		return errors.Wrap(err, "failed to create user")
+		return nil, errors.Wrap(err, "failed to create user")
 	}
-	return nil
+	return user, nil
 }
 
 func (r *AuthRepositoryImpl) GetUserByEmail(email string) (*entities.User, error) {
@@ -43,23 +43,23 @@ func (r *AuthRepositoryImpl) GetUserById(userID int64) (*entities.User, error) {
 	return &user, nil
 }
 
-func (r *AuthRepositoryImpl) UpdateUser(user *entities.User) error {
+func (r *AuthRepositoryImpl) UpdateUser(user *entities.User) (*entities.User, error) {
 	if err := r.db.Save(user).Error; err != nil {
-		return errors.Wrap(err, "failed to update user")
+		return nil, errors.Wrap(err, "failed to update user")
 	}
-	return nil
+	return user, nil
 }
 
-func (r *AuthRepositoryImpl) DeleteUser(user *entities.User) error {
+func (r *AuthRepositoryImpl) DeleteUser(user *entities.User) (*entities.User, error) {
 	if err := r.db.Unscoped().Delete(user).Error; err != nil {
-		return errors.Wrap(err, "failed to delete user")
+		return nil, errors.Wrap(err, "failed to delete user")
 	}
-	return nil
+	return user, nil
 }
 
-func (r *AuthRepositoryImpl) SoftDeleteUser(user *entities.User) error {
+func (r *AuthRepositoryImpl) SoftDeleteUser(user *entities.User) (*entities.User, error) {
 	if err := r.db.Delete(user).Error; err != nil {
-		return errors.Wrap(err, "failed to soft delete user")
+		return nil, errors.Wrap(err, "failed to soft delete user")
 	}
-	return nil
+	return user, nil
 }

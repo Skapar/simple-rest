@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Skapar/simple-rest/internal/models"
+	"github.com/Skapar/simple-rest/internal/models/dto"
 	"github.com/Skapar/simple-rest/internal/models/entities"
 	"github.com/Skapar/simple-rest/internal/service"
 	"github.com/Skapar/simple-rest/internal/utils"
@@ -18,11 +19,28 @@ func NewAuthHandler(authService service.AuthService) *AuthHandler {
 	return &AuthHandler{authService: authService}
 }
 
+// RegisterUserHandler godoc
+// @Summary Register a new user
+// @Description Register a new user with the input payload
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param   user body dto.CreateUserDTO true "User"
+// @Success 201 {object} models.Response[map[string]string]
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /api/v1/signup [post]
 func (ah *AuthHandler) RegisterUserHandler(c *gin.Context) {
-	var user entities.User
-	if err := c.ShouldBindJSON(&user); err != nil {
+	var userDTO dto.CreateUserDTO
+	if err := c.ShouldBindJSON(&userDTO); err != nil {
 		utils.RespondWithError(c, http.StatusBadRequest, err.Error())
 		return
+	}
+
+	user := entities.User{
+		Username: userDTO.Username,
+		Email:    userDTO.Email,
+		Password: userDTO.Password,
 	}
 
 	accessToken, refreshToken, err := ah.authService.RegisterUser(&user)

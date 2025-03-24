@@ -42,7 +42,7 @@ func (s *UserServiceImpl) UpdateUser(userID int64, user *entities.User) error {
 		return err
 	}
 
-	if err := s.repo.UpdateUser(existingUser); err != nil {
+	if _, err := s.repo.UpdateUser(existingUser); err != nil {
 		return errors.Wrap(err, "failed to update user")
 	}
 	return nil
@@ -80,18 +80,20 @@ func (s *UserServiceImpl) updatePassword(existingUser *entities.User, password s
 	return nil
 }
 
-func (s *UserServiceImpl) DeleteUser(userID int64) error {
+func (s *UserServiceImpl) DeleteUser(userID int64) (*entities.User, error) {
 	user := &entities.User{ID: userID}
-	if err := s.repo.DeleteUser(user); err != nil {
-		return errors.Wrap(err, "failed to delete user")
+	deletedUser, err := s.repo.DeleteUser(user)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to delete user")
 	}
-	return nil
+	return deletedUser, nil
 }
 
-func (s *UserServiceImpl) SoftDeleteUser(userID int64) error {
+func (s *UserServiceImpl) SoftDeleteUser(userID int64) (*entities.User, error) {
 	user := &entities.User{ID: userID}
-	if err := s.repo.SoftDeleteUser(user); err != nil {
-		return errors.Wrap(err, "failed to soft delete user")
+	softDeletedUser, err := s.repo.SoftDeleteUser(user)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to soft delete user")
 	}
-	return nil
+	return softDeletedUser, nil
 }

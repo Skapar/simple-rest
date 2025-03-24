@@ -32,22 +32,23 @@ func (s *AuthServiceImpl) RegisterUser(user *entities.User) (string, string, err
 	}
 	user.Password = string(hashedPassword)
 
-	if err := s.repo.CreateUser(user); err != nil {
+	createdUser, err := s.repo.CreateUser(user)
+	if err != nil {
 		return "", "", errors.Wrap(err, "failed to create user")
 	}
 
-	accessToken, err := s.generateJWT(user.ID)
+	accessToken, err := s.generateJWT(createdUser.ID)
 	if err != nil {
 		return "", "", errors.Wrap(err, "failed to generate access token")
 	}
 
-	refreshToken, err := s.generateRefreshToken(user.ID)
+	refreshToken, err := s.generateRefreshToken(createdUser.ID)
 	if err != nil {
 		return "", "", errors.Wrap(err, "failed to generate refresh token")
 	}
 
-	user.RefreshToken = refreshToken
-	if err := s.repo.UpdateUser(user); err != nil {
+	createdUser.RefreshToken = refreshToken
+	if _, err := s.repo.UpdateUser(createdUser); err != nil {
 		return "", "", errors.Wrap(err, "failed to update user with refresh token")
 	}
 

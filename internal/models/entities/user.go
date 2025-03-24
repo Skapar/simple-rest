@@ -6,6 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
+// User represents a user in the system
+// @Description User represents a user in the system
 type User struct {
 	ID           int64          `gorm:"primaryKey" json:"id"`
 	Username     string         `gorm:"unique;not null" json:"username"`
@@ -14,5 +16,5 @@ type User struct {
 	RefreshToken string         `json:"refresh_token"`
 	CreatedAt    time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt    time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
-	DeletedAt    gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	DeletedAt    gorm.DeletedAt `gorm:"index" json:"-" swaggerignore:"true"`
 }
